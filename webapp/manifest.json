@@ -17,18 +17,11 @@
     },
     "dataSources": {
       "mainService": {
-        "uri": "/odata/v2/",
+        "uri": "/odata/v2",
         "type": "OData",
         "settings": {
           "annotations": [],
           "localUri": "localService/metadata.xml",
-          "odataVersion": "2.0"
-        }
-      },
-      "picklistapi": {
-        "uri": "/odata/v2",
-        "type": "OData",
-        "settings": {
           "odataVersion": "2.0"
         }
       }
@@ -64,7 +57,6 @@
     }
   },
   "sap.ui5": {
-   
     "dependencies": {
       "minUI5Version": "1.96.20",
       "libs": {
@@ -89,8 +81,8 @@
           "bundleName": "picklistmanagement.i18n.i18n"
         }
       },
-      "picklist": {
-        "dataSource": "picklistapi",
+      "": {
+        "dataSource": "mainService",
         "preload": true,
         "settings": {
           "defaultBindingMode": "TwoWay",
@@ -98,12 +90,6 @@
           "defaultCountMode": "Inline",
           "refreshAfterChange": false
         }
-      },
-      
-      "": {
-        "dataSource": "mainService",
-        "preload": true,
-        "settings": {}
       }
     },
     "resources": {
@@ -125,20 +111,34 @@
       },
       "routes": [
         {
-          "name": "RouteView1",
-          "pattern": ":?query:",
+          "name": "RouteViewValues",
+          "pattern": "/picklist({picklist_id},{effectiveStartDate})",
           "target": [
-            "TargetView1"
+            "PicklistValues"
+          ]
+        },
+        {
+          "name": "RouteView1",
+          "pattern": ":*all:",
+          "target": [
+            "PicklistOverview"
           ]
         }
       ],
       "targets": {
-        "TargetView1": {
+        "PicklistOverview": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "viewId": "View1",
           "viewName": "View1"
+        },
+        "PicklistValues": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "PicklistValueView",
+          "viewName": "PicklistValueView"
         }
       }
     },

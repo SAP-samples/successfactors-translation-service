@@ -1,0 +1,118 @@
+<mvc:View
+    controllerName="picklistmanagement.controller.PicklistValueView"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    width="100%"
+    xmlns:u="sap.ui.unified"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+>
+    <f:DynamicPage
+        id="dynamicPageId"
+        preserveHeaderStateOnScroll="true"
+        headerExpanded="{/headerExpanded}"
+        showFooter="true"
+        fitContent="true"
+    >
+        <f:title>
+				<f:DynamicPageTitle>
+					<f:heading>
+						<Title text="Picklist '{id}'"/>
+					</f:heading>
+                </f:DynamicPageTitle>
+        </f:title>
+        <f:content>
+            <VBox
+                justifyContent="SpaceBetween"
+                class="sapUiSmallMargin"
+            >
+                <Label text="Effective Date" />
+                <DatePicker
+                    id="date"
+                    value="{path: '/date', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true }}"
+                    valueFormat="timestamp"
+                    displayFormat="long"
+                    change="date"
+                />
+                <Label text="Picklist Values" />
+                <Table
+                    id="smarttable"
+                    inset="false"
+                    items="{
+                        path: 'values',
+                        sorter: {
+                            path: 'Name'
+                        }
+                    }"
+                >
+                    <columns>
+                        <Column width="12em">
+                            <Text text="English" />
+                        </Column>
+                        <Column width="12em">
+                            <Text text="German" />
+                        </Column>
+                        <Column width="12em">
+                            <Text text="French" />
+                        </Column>
+                        <Column width="12em">
+                            <Text text="da-DK" />
+                        </Column>
+                        <Column width="12em">
+                            <Text text="Chinese" />
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem vAlign="Middle">
+                            <cells>
+                                <Input
+                                    id="label_en_US"
+                                    value="{label_en_US}"
+                                />
+                                <Input
+                                    id="label_de_DE"
+                                    value="{label_de_DE}"
+                                />
+                                <Input
+                                    id="label_fr_FR"
+                                    value="{label_fr_FR}"
+                                />
+                                <Input
+                                    id="label_da_DK"
+                                    value="{label_da_DK}"
+                                />
+                                <Input
+                                    id="label_zh_CN"
+                                    value="{label_zh_CN}"
+                                />
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </f:content>
+        <f:footer>
+            <Toolbar>
+                <ToolbarSpacer />
+                <Button
+                    type="Emphasized"
+                    text="Save"
+                    press=".onSubmit"
+                />
+                <Button
+                    text="Translate"
+                    press="onTranslation"
+                />
+                <Button
+                    icon="sap-icon://action"
+                    type="Transparent"
+                    press="onPress"
+                />
+            </Toolbar>
+        </f:footer>
+    </f:DynamicPage>
+</mvc:View>
