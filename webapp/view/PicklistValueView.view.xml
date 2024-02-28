@@ -99,6 +99,7 @@
             <Toolbar>
                 <ToolbarSpacer />
                 <Button
+                    id="submitButton"
                     type="Emphasized"
                     text="Save"
                     press=".onSubmit"

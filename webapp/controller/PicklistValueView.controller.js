@@ -56,7 +56,12 @@ sap.ui.define([
                     return;
                 }
 
-                const aTableItemContexts = this.getView().byId("smarttable").getBinding("items").getContexts();
+                const oTable = this.getView().byId("smarttable");
+                const oSubmitButton = this.getView().byId("submitButton");
+                oTable.setBusy(true);
+                oSubmitButton.setEnabled(false);
+
+                const aTableItemContexts = oTable.getBinding("items").getContexts();
                 const aPromises = [];
 
                 aTableItemContexts.forEach((oContext => {
@@ -85,7 +90,8 @@ sap.ui.define([
                 }).bind(this));
 
                 Promise.all(aPromises).then(() => {
-                    console.log("success :)")
+                    oTable.setBusy(false);
+                    oSubmitButton.setEnabled(true);
                 });
             },
 
@@ -112,14 +118,62 @@ sap.ui.define([
                     return;
                 }
 
-                oModel.submitChanges({
-                    success: function() {
-                        sap.m.MessageToast.show("Changes saved");
-                    },
-                    error: function(error) {
-                        console.error(error);
+                const aRawValueData = this.getView().byId("smarttable").getBinding("items").getContexts().map(context => context.getObject());
+                const allowed = Object.keys(aRawValueData[0]).filter(key => {
+                    if (key === "status" || key === "externalCode" || key.indexOf("label_") === 0) {
+                        return true;
+                    } else {
+                        return false;
                     }
                 });
+
+                // allow only values in allowlist above
+                const aValueData = aRawValueData.map(oObject => {
+                    let returnObject = {};
+                    Object.keys(oObject).forEach(key => {
+                        if (allowed.includes(key)) {
+                            returnObject[key] = oObject[key];
+                        }
+                    });
+                    return returnObject;
+                });
+
+                const id = this.getView().getBindingContext().getObject().id;
+                const unixTimestamp = this.getModel("localModel").getProperty("/dateUNIX");
+
+                const payload = {
+                    "__metadata": {
+                        "uri": "https://apisalesdemo2.successfactors.eu/odata/v2/PickListV2",
+                        "type": "SFOData.PickListV2"
+                    },
+                    "id": id,
+                    "status": "A",
+                    "effectiveStartDate": "/Date(" + unixTimestamp + "000)/",
+                    "values": {
+                        "results": aValueData
+                    }
+                }
+
+                debugger;
+
+                const requestOptions_create = {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json' // Set the content type based on your payload
+                    },
+                    body: JSON.stringify(payload) // Convert the payload to a JSON string
+                };
+                fetch(`/odata/v2/upsert/`, requestOptions_create)
+                    .then(response => response.json())
+                    .then(json => {
+                        // Handle the response if needed
+                        console.log(json);
+                    })
+                    .catch(error => {
+                        // Handle errors
+                        console.error('Error:', error);
+                    });
             }
         });
     });
