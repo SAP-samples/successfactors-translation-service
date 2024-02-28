@@ -105,12 +105,12 @@
                 />
                 <Button
                     text="Translate"
-                    press="onTranslation"
+                    press=".onTranslation"
                 />
                 <Button
                     icon="sap-icon://action"
                     type="Transparent"
-                    press="onPress"
+                    press=".onPress"
                 />
             </Toolbar>
         </f:footer>

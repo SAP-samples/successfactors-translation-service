@@ -26,6 +26,11 @@ sap.ui.define([
                 var picklistId = oEvent.getParameter("arguments").picklist_id;
                 var effectiveStartDate = oEvent.getParameter("arguments").effectiveStartDate;
 
+                if (!picklistId || !effectiveStartDate) {
+                    this.getOwnerComponent().getRouter().navTo("RouteView1");
+                    return;
+                }
+
                 const sPath = `/PickListV2(effectiveStartDate=datetime'${effectiveStartDate.replace(".000Z", "")}',id='${picklistId}')`
                 this.getView().bindElement(sPath);
 
