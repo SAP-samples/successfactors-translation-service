@@ -27,7 +27,12 @@ sap.ui.define([
                 var aFilters = [];
                 var sQuery = oEvent.getSource().getValue();
                 if (sQuery && sQuery.length > 0) {
-                    var filter = new Filter("id", FilterOperator.Contains, sQuery);
+                    var filter = new Filter({
+                        path: "id",
+                        operator: FilterOperator.Contains,
+                        value1: sQuery,
+                        caseSensitive: false
+                    });
                     aFilters.push(filter);
                 }
 

@@ -28,7 +28,8 @@
                 id="idPicklistTable"
                 inset="false"
                 items="{
-						path: '/PickListV2'
+						path: '/PickListV2',
+						filters: [{path: 'status', operator: 'EQ', value1: 'A'}]
 					}"
                 growing="true"
                 growingScrollToLoad="true"

@@ -1,10 +1,12 @@
 sap.ui.define([
-    "sap/ui/core/mvc/Controller"
+    "sap/ui/core/mvc/Controller",
+    "sap/ui/model/json/JSONModel"
+
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
      */
-    function (Controller) {
+    function (Controller, JSONModel) {
         "use strict";
 
         var unixTimestamp
@@ -17,9 +19,10 @@ sap.ui.define([
                 var oRouter = oOwnerComponent.getRouter();
 
                 oRouter.getRoute("RouteViewValues").attachPatternMatched(this._onPicklistMatched, this);
+
             },
 
-            _onPicklistMatched: function(oEvent) {
+            _onPicklistMatched: function (oEvent) {
                 var picklistId = oEvent.getParameter("arguments").picklist_id;
                 var effectiveStartDate = oEvent.getParameter("arguments").effectiveStartDate;
 
@@ -92,6 +95,9 @@ sap.ui.define([
 
                 // Get the array of items in the table
                 var aItems = oTable.getItems();
+                var oItemContext = oItem.getContext()
+                var oModelObject = oItemContext.getObject()
+                console.log(oModelObject)
 
                 // Array to store column header texts
                 var aColumnLabels = [];
@@ -113,7 +119,7 @@ sap.ui.define([
 
                     var aRowValues = [];
 
-                    aCells.forEach(function(oCell) {
+                    aCells.forEach(function (oCell) {
                         // Check if the cell is an input field
                         if (oCell instanceof sap.m.Input) {
                             // Read the value of the input field
@@ -143,7 +149,12 @@ sap.ui.define([
                 // Now aData contains objects where each object represents a row with column header texts as labels and corresponding input field values
                 console.log("Data with column header texts as labels:", aData);
 
+                oModel = this.getView().getModel();
+                console.log(oModel)
+                var context = oModel.getContexts()
+                 console.log(context)
 
+                var that = this
 
                 aData.forEach(function (obj, rowIndex) {
                     for (var key in obj) {
@@ -151,6 +162,21 @@ sap.ui.define([
                             console.log("Empty field detected in row " + rowIndex + ", label: " + key);
                             var us_value = aData[rowIndex].English
                             console.log(us_value)
+                            var row = rowIndex
+                            console.log(row)
+                            var language_key = key
+                            console.log(language_key)
+                            // Define your string mappings using a Map
+                            const stringMappings = new Map([
+                                ['da-DK', 'label_da_DK'],
+                                ['key2', 'mappedValue2'],
+                                ['key3', 'mappedValue3']
+                            ]);
+                            // Access the mapped value using the variable
+                            var mappedValue = stringMappings.get(key);
+                            console.log(mappedValue); // Output: mappedValue2
+
+
 
                             let payload2 = {
                                 "sourceLanguage": "en-US",
@@ -166,6 +192,7 @@ sap.ui.define([
                                 },
                                 body: JSON.stringify(payload2) // Convert the payload to a JSON string
                             };
+                           
                             fetch(`/api/v1/translation`, requestOptions2)
                                 .then(response => response.json())
                                 .then(json => {
@@ -173,25 +200,31 @@ sap.ui.define([
                                     console.log(json);
                                     console.log(json.data)
                                     var dk1 = json.data
-                                    console.log(dk1)
-                                    aData[rowIndex][key] = dk1
+                                    var number = row + 1;
+                                    console.log(number)
+
+                                    aData[row][language_key] = dk1
                                     //that.dk1 = json.data;
                                     // Set the value of 'row1' property in the model
                                     //   oModel.setProperty("/values/" + index + "/label_zh_CN", dk1);
+                                    oModel = that.getView().getModel();
                                     console.log("Modified aData:", aData);
-                                    
+                                    oModel.setProperty("values", aData);
                                 })
+
+
+
                                 .catch(error => {
                                     // Handle errors
                                     console.error('Error:', error);
                                 })
                                 ;
-                                
+
                         }
                     }
                 });
 
-                
+                console.log(oModel)
 
             },
 
@@ -201,7 +234,7 @@ sap.ui.define([
                 US = US.replace(/\s/g, "");
                 oModel.setProperty("/values/" + index + "/externalCode", US)
             },
-            
+
             onSubmit: function () {
 
                 // Assuming oModel is your model

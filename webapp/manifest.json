@@ -54,11 +54,16 @@
       "desktop": true,
       "tablet": true,
       "phone": true
-    }
+    },
+    "supportedThemes": [
+      "sap_horizon_hcb",
+      "sap_horizon_dark",
+      "sap_horizon"
+    ]
   },
   "sap.ui5": {
     "dependencies": {
-      "minUI5Version": "1.96.20",
+      "minUI5Version": "1.120.8",
       "libs": {
         "sap.m": {},
         "sap.ui.core": {},
