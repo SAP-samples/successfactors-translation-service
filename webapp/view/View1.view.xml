@@ -1,100 +1,59 @@
-<mvc:View controllerName="picklistmanagement.controller.View1"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m" xmlns:core="sap.ui.core"
-          xmlns:html="http://www.w3.org/1999/xhtml"
-          width="100%"
-		xmlns:u="sap.ui.unified"
-		xmlns:t="sap.ui.table"
-		xmlns:f="sap.f"
-		
-		xmlns:layout="sap.ui.layout"
-        >
-    <Page id="page" title="{i18n>title}">
+<mvc:View
+    controllerName="picklistmanagement.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    width="100%"
+    xmlns:u="sap.ui.unified"
+    xmlns:t="sap.ui.table"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <subHeader>
+            <OverflowToolbar>
+                <SearchField
+                    liveChange=".onSearch"
+                    width="100%"
+                />
+            </OverflowToolbar>
+        </subHeader>
         <content>
-        <VBox justifyContent="SpaceBetween" renderType="Bare">
-			<Label text="Pick a Picklist:" labelFor="area"/>
-				<ComboBox 
-					id="picklistid"
-						items="{
-						path: 'picklist>/PickListV2'
+            <Table
+                id="idPicklistTable"
+                inset="false"
+                items="{
+						path: '/PickListV2',
+						filters: [{path: 'status', operator: 'EQ', value1: 'A'}]
 					}"
-						selectionChange="handleLoadItems">
-					<core:ListItem key="{picklist>id}" text="{picklist>id}"/>
-				</ComboBox>
-					<Label text="Effective Date" />
-			<DatePicker id="date"
-  value="{path: '/date', type: 'sap.ui.model.type.Date', formatOptions: { UTC: true }}"
-  valueFormat="timestamp"
-  displayFormat="long"
-  change="date"  />
-
-			
-		</VBox>
-		
-    	<f:DynamicPage id="dynamicPageId" preserveHeaderStateOnScroll="true" headerExpanded="{/headerExpanded}" showFooter="true" fitContent="true">
-    	
-		<f:content>
-		<Table id="smarttable" 
-		inset="false"
-		items="{
-			path: 'picklist>values',
-			sorter: {
-				path: 'Name'
-			}
-		}">
-		
-				
-			
-			<columns>
-			<Column
-				width="12em">
-				<Text text="English" />
-			</Column>
-			<Column
-				width="12em">
-				<Text text="German" />
-			</Column>
-			<Column
-				width="12em">
-				<Text text="French" />
-			</Column>
-			<Column
-				width="12em">
-				<Text text="da-DK" />
-			</Column>
-			<Column
-				width="12em">
-				<Text text="Chinese" />
-			</Column>			
-		</columns>
-		<items >
-			<ColumnListItem vAlign="Middle" >
-				<cells >
-					
-					<Input id="label_en_US" value="{picklist>label_en_US}" />
-<Input id="label_de_DE" value="{picklist>label_de_DE}" />
-<Input id="label_fr_FR" value="{picklist>label_fr_FR}" />
-<Input id="label_da_DK" value="{picklist>label_da_DK}"/>
-<Input id="label_zh_CN" value="{picklist>label_zh_CN}" />
-				</cells>
-			</ColumnListItem>
-			
-				
-
-		</items>
-				</Table>
-			</f:content>
-   <f:footer>
-			<Toolbar>
-				<ToolbarSpacer/>
-				<Button type="Emphasized" text="Save" press=".onSubmit" />
-				<Button text="Translate" press="onTranslation" />
-				<Button icon="sap-icon://action" type="Transparent" press="onPress" />
-			</Toolbar>
-		</f:footer>
-       	</f:DynamicPage>
-
-
+                growing="true"
+                growingScrollToLoad="true"
+            >
+                <columns>
+                    <Column width="12em">
+                        <Text text="Picklist ID" />
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem
+                        vAlign="Middle"
+                        type="Navigation"
+                        press="handleItemPress"
+                    >
+                        <cells>
+                            <ObjectIdentifier
+                                title="{id}"
+                                text="{ProductId}"
+                            />
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
         </content>
     </Page>
-    </mvc:View>
+</mvc:View>

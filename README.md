@@ -11,7 +11,7 @@
 |**Module Name**<br>picklistmanagement|
 |**Application Title**<br>Picklist |
 |**Namespace**<br>|
-|**UI5 Theme**<br>sap_fiori_3|
+|**UI5 Theme**<br>sap_horizon_dark|
 |**UI5 Version**<br>1.96.20|
 |**Enable Code Assist Libraries**<br>False|
 |**Enable TypeScript**<br>False|
