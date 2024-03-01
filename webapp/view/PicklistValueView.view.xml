@@ -48,7 +48,7 @@
                 >
                     <columns>
                         <Column>
-                            <Text text="{localModel>key}" />
+                            <Text text="{path: 'localModel>key', formatter: '.labelFormatter'}" />
                         </Column>
                     </columns>
                 </Table>
