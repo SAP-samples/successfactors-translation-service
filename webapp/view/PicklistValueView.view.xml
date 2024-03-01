@@ -42,56 +42,15 @@
                 <Table
                     id="smarttable"
                     inset="false"
-                    items="{
-                        path: 'values',
-                        sorter: {
-                            path: 'Name'
-                        }
-                    }"
+                    growing="true"
+                    growingScrollToLoad="true"
+                    columns="{localModel>/languages}"
                 >
                     <columns>
-                        <Column width="12em">
-                            <Text text="English" />
-                        </Column>
-                        <Column width="12em">
-                            <Text text="German" />
-                        </Column>
-                        <Column width="12em">
-                            <Text text="French" />
-                        </Column>
-                        <Column width="12em">
-                            <Text text="da-DK" />
-                        </Column>
-                        <Column width="12em">
-                            <Text text="Chinese" />
+                        <Column>
+                            <Text text="{localModel>key}" />
                         </Column>
                     </columns>
-                    <items>
-                        <ColumnListItem vAlign="Middle">
-                            <cells>
-                                <Input
-                                    id="label_en_US"
-                                    value="{label_en_US}"
-                                />
-                                <Input
-                                    id="label_de_DE"
-                                    value="{label_de_DE}"
-                                />
-                                <Input
-                                    id="label_fr_FR"
-                                    value="{label_fr_FR}"
-                                />
-                                <Input
-                                    id="label_da_DK"
-                                    value="{label_da_DK}"
-                                />
-                                <Input
-                                    id="label_zh_CN"
-                                    value="{label_zh_CN}"
-                                />
-                            </cells>
-                        </ColumnListItem>
-                    </items>
                 </Table>
             </VBox>
         </f:content>

@@ -33,6 +33,8 @@
 					}"
                 growing="true"
                 growingScrollToLoad="true"
+                updateStarted="tableBusyTrue"
+                updateFinished="tableBusyFalse"
             >
                 <columns>
                     <Column width="12em">
