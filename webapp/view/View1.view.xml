@@ -35,6 +35,7 @@
                 growingScrollToLoad="true"
                 updateStarted="tableBusyTrue"
                 updateFinished="tableBusyFalse"
+                busy="true"
             >
                 <columns>
                     <Column width="12em">

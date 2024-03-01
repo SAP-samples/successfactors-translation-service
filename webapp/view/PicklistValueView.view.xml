@@ -23,6 +23,9 @@
 					<f:heading>
 						<Title text="Picklist '{id}'"/>
 					</f:heading>
+                    <f:navigationActions>
+                        <Button icon="sap-icon://nav-back" text="Back" type="Emphasized"/>
+                    </f:navigationActions>
                 </f:DynamicPageTitle>
         </f:title>
         <f:content>
