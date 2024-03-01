@@ -50,12 +50,6 @@ sap.ui.define([
             },
 
             onTranslationSimple: function () {
-                // check if new effective date is set
-                if (!this.getModel("localModel").getProperty("/dateUNIX")) {
-                    sap.m.MessageToast.show("Please select new effective date first");
-                    return;
-                }
-
                 const oTable = this.getView().byId("smarttable");
                 const oSubmitButton = this.getView().byId("submitButton");
                 oTable.setBusy(true);
@@ -112,6 +106,11 @@ sap.ui.define([
             },
 
             onSubmit: function () {
+                // check if new effective date is set
+                if (!this.getModel("localModel").getProperty("/dateUNIX")) {
+                    sap.m.MessageToast.show("Please select new effective date first");
+                    return;
+                }
                 const oModel = this.getModel();
                 if (!oModel.hasPendingChanges()) {
                     sap.m.MessageToast.show("No changes to submit");
@@ -120,7 +119,7 @@ sap.ui.define([
 
                 const aRawValueData = this.getView().byId("smarttable").getBinding("items").getContexts().map(context => context.getObject());
                 const allowed = Object.keys(aRawValueData[0]).filter(key => {
-                    if (key === "status" || key === "externalCode" || key.indexOf("label_") === 0) {
+                    if ((key === "status" || key === "externalCode" || key.indexOf("label_") === 0) && key !== "label_localized") {
                         return true;
                     } else {
                         return false;
