@@ -14,8 +14,10 @@ sap.ui.define([
                 this.getView().setModel(new JSONModel({
                     dateUNIX: undefined,
                     languages: aLanguages,
+          //          csrfToken: undefined,
                 }), "localModel");
                 this.getRouter().getRoute("RouteViewValues").attachPatternMatched(this._onPicklistMatched, this);
+   //             this._getCsrfTranslationToken();
             },
             getRouter: function () {
                 return this.getOwnerComponent().getRouter();
@@ -26,6 +28,10 @@ sap.ui.define([
 
             labelFormatter: function (sValue) {
                 return sValue.replace("label_", "");
+            },
+
+            onNavBack: function () {
+                this.getOwnerComponent().getRouter().navTo("RouteView1");
             },
 
             _onPicklistMatched: function (oEvent) {
@@ -66,6 +72,7 @@ sap.ui.define([
 
                 const aTableItemContexts = oTable.getBinding("items").getContexts();
                 const aPromises = [];
+          //      const sCsrfToken = this.getModel("localModel").getProperty("/csrfToken");
 
                 aTableItemContexts.forEach((oContext => {
                     const oRowObject = oContext.getObject();
@@ -97,23 +104,64 @@ sap.ui.define([
                     oSubmitButton.setEnabled(true);
                 });
             },
-
-            _translate: function (sSourceText, sTargetLanguageKey) {
+/*
+            _translate: function (sSourceText, sTargetLanguageKey, sCsrfToken) {
                 return fetch(`/api/v1/translation`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
-                        'Content-Type': 'application/json' // Set the content type based on your payload
+                        'Content-Type': 'application/json',
+                        'X-Csrf-Token': sCsrfToken,
                     },
                     body: JSON.stringify({
                         "sourceLanguage": "en-US",
                         "targetLanguage": sTargetLanguageKey,
                         "contentType": "text/plain",
-                        "data": sSourceText
+                        "data": sSourceText,
                     }) // Convert the payload to a JSON string
                 }).then(response => response.json());
             },
 
+  _getCsrfTranslationToken: function() {
+                fetch('api/v1/domains', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRF-Token': 'Fetch',
+                    },
+                }).then(function(response) {
+                    this.getModel("localModel").setProperty("/csrfToken", response.headers.get("X-Csrf-Token"));
+                }.bind(this));
+            },
+
+
+
+            */
+
+
+
+_translate: function (sSourceText, sTargetLanguageKey, sCsrfToken) {
+    var destinationName = "Translation"; // Retrieve destination name from manifest or wherever appropriate
+    var destinationUrl = "/dynamic_dest/" + destinationName;
+    
+    return fetch(destinationUrl + `/api/v1/translation`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+     //       'X-Csrf-Token': sCsrfToken,
+        },
+        body: JSON.stringify({
+            "sourceLanguage": "en-US",
+            "targetLanguage": sTargetLanguageKey,
+            "contentType": "text/plain",
+            "data": sSourceText,
+        }) // Convert the payload to a JSON string
+    }).then(response => response.json());
+},
+
+
+          
             onSubmit: function () {
                 // check if new effective date is set
                 if (!this.getModel("localModel").getProperty("/dateUNIX")) {
@@ -161,6 +209,8 @@ sap.ui.define([
                         "results": aValueData
                     }
                 }
+                var destinationName_upsert = "SFADMIN"; // Retrieve destination name from manifest or wherever appropriate
+                var destinationUrl_upsert = "/dynamic_dest/" + destinationName_upsert;
 
                 const requestOptions_create = {
                     method: 'POST',
@@ -170,7 +220,7 @@ sap.ui.define([
                     },
                     body: JSON.stringify(payload) // Convert the payload to a JSON string
                 };
-                fetch(`/odata/v2/upsert/`, requestOptions_create)
+                fetch(destinationUrl_upsert + `/odata/v2/upsert/`, requestOptions_create)
                     .then(response => response.json())
                     .then(json => {
                         // Handle the response if needed
