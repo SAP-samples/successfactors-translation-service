@@ -1,11 +1,14 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/model/json/JSONModel",
+    "sap/m/MessageToast",
 ],
     /**
      * @param {typeof sap.ui.core.mvc.Controller} Controller
+     * @param {typeof sap.ui.model.json.JSONModel} JSONModel
+     * @param {typeof sap.m.MessageToast} MessageToast
      */
-    function (Controller, JSONModel) {
+    function (Controller, JSONModel, MessageToast) {
         "use strict";
 
         return Controller.extend("picklistmanagement.controller.PicklistValueView", {
@@ -14,14 +17,14 @@ sap.ui.define([
                 this.getView().setModel(new JSONModel({
                     dateUNIX: undefined,
                     languages: aLanguages,
-                    //          csrfToken: undefined,
                 }), "localModel");
                 this.getRouter().getRoute("RouteViewValues").attachPatternMatched(this._onPicklistMatched, this);
-                //             this._getCsrfTranslationToken();
             },
+
             getRouter: function () {
                 return this.getOwnerComponent().getRouter();
             },
+
             getModel: function (sModelName) {
                 return this.getView().getModel(sModelName);
             },
@@ -31,7 +34,7 @@ sap.ui.define([
             },
 
             onNavBack: function () {
-                this.getOwnerComponent().getRouter().navTo("RouteView1");
+                this.getRouter().navTo("RouteView1");
             },
 
             _onPicklistMatched: function (oEvent) {
@@ -39,7 +42,7 @@ sap.ui.define([
                 var effectiveStartDate = oEvent.getParameter("arguments").effectiveStartDate;
 
                 if (!picklistId || !effectiveStartDate) {
-                    this.getOwnerComponent().getRouter().navTo("RouteView1");
+                    this.getRouter().navTo("RouteView1");
                     return;
                 }
 
@@ -63,7 +66,6 @@ sap.ui.define([
 
                 this.getModel("localModel").setProperty("/dateUNIX", Math.floor(Date.parse(effectivedate) / 1000));
             },
-
             onTranslationSimple: function () {
                 const oTable = this.getView().byId("smarttable");
                 const oSubmitButton = this.getView().byId("submitButton");
@@ -72,7 +74,6 @@ sap.ui.define([
 
                 const aTableItemContexts = oTable.getBinding("items").getContexts();
                 const aPromises = [];
-                //      const sCsrfToken = this.getModel("localModel").getProperty("/csrfToken");
 
                 aTableItemContexts.forEach((oContext => {
                     const oRowObject = oContext.getObject();
@@ -105,7 +106,7 @@ sap.ui.define([
                 });
             },
 
-            _translate: function (sSourceText, sTargetLanguageKey, sCsrfToken) {
+            _translate: function (sSourceText, sTargetLanguageKey) {
                 var destinationName = "Translation"; // Retrieve destination name from manifest or wherever appropriate
                 var destinationUrl = "/dynamic_dest/" + destinationName;
 
@@ -114,7 +115,6 @@ sap.ui.define([
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
-                        //       'X-Csrf-Token': sCsrfToken,
                     },
                     body: JSON.stringify({
                         "sourceLanguage": "en-US",
@@ -125,17 +125,15 @@ sap.ui.define([
                 }).then(response => response.json());
             },
 
-
-
             onSubmit: function () {
                 // check if new effective date is set
                 if (!this.getModel("localModel").getProperty("/dateUNIX")) {
-                    sap.m.MessageToast.show("Please select new effective date first");
+                    MessageToast.show("Please select new effective date first");
                     return;
                 }
                 const oModel = this.getModel();
                 if (!oModel.hasPendingChanges()) {
-                    sap.m.MessageToast.show("No changes to submit");
+                    MessageToast.show("No changes to submit");
                     return;
                 }
 
@@ -186,12 +184,12 @@ sap.ui.define([
                     body: JSON.stringify(payload) // Convert the payload to a JSON string
                 };
                 fetch(destinationUrl_upsert + `/odata/v2/upsert/`, requestOptions_create)
-                    .then(response => response.json())
-                    .then(json => {
-                        // Handle the response if needed
-                        console.log(json);
+                    .then(_ =>  {
+                        MessageToast.show("Changes submitted successfully");
                     })
                     .catch(error => {
+                        // better error handling would be nice in a productive version :)
+                        MessageToast.show("An error occured. Please check details in console.");
                         // Handle errors
                         console.error('Error:', error);
                     });

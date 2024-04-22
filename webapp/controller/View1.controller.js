@@ -39,9 +39,7 @@ sap.ui.define([
                 }
 
                 // update list binding
-                var oList = this.byId("idPicklistTable");
-                var oBinding = oList.getBinding("items");
-                oBinding.filter(aFilters, "Application");
+                this.byId("idPicklistTable").getBinding("items").filter(aFilters, "Application");
             },
 
             tableBusyTrue: function (oEvent) {
