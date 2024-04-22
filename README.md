@@ -1,4 +1,4 @@
-# [Title]
+# SAP SuccessFactors Picklist Helper
 <!-- Please include descriptive title -->
 
 <!--- Register repository https://api.reuse.software/register, then add REUSE badge:
@@ -6,15 +6,15 @@
 -->
 
 ## Description
-<!-- Please include SEO-friendly description -->
+The SAP SuccessFactors Picklist Helper gently connects to your SUccessFactors environment and makes the translation of picklists as easy as possible
 
 ## Requirements
 
 ## Download and Installation
-Detailed instructions see [blog article on SAP Community]().
+Detailed instructions see [blog article on SAP Community](https://community.sap.com/t5/technology-blogs-by-sap/how-to-use-ai-services-to-translate-picklists-in-sap-successfactors-an/ba-p/13674307).
 
 ## Known Issues
-See [blog article on SAP Community]().
+See [blog article on SAP Community](https://community.sap.com/t5/technology-blogs-by-sap/how-to-use-ai-services-to-translate-picklists-in-sap-successfactors-an/ba-p/13674307).
 
 ## How to obtain support
 [Create an issue](https://github.com/SAP-samples/successfactors-translation-service/issues) in this repository if you find a bug or have questions about the content.
